@@ -11,4 +11,4 @@
 网上国网 = type=cron, cronexp="{{{CRONEXP}}}", script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/master/script/95598/95598.js, timeout={{{TIMEOUT}}},argument=username="{{{USERNAME}}}"&password="{{{PASSWORD}}}"&debug="{{{调试模式}}}"&show_recent_usage="{{{近期用量}}}"&notify_all_accounts="{{{通知全部户号}}}"
 
 [MITM]
-hostname = %APPEND% api.wsgw-rewrite.com,api.120399.xyz
+hostname = %APPEND% api.wsgw-rewrite.com,api.120399.xyz,www.95598.cn
