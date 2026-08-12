@@ -85,23 +85,23 @@ else {
       body: ""
     };
 
-    $task.fetch(req).then(
-      (resp) => {
-        const s = resp.statusCode;
-        let msg = "";
-        try { msg = JSON.parse(resp.body || "{}").message || ""; } catch (e) {}
-
-        const tag = FIXED_LEGS === "true" ? "固定" : "随机";
-        if (s === 403) $notification.post(SCRIPT_NAME, "被风控(403)", "稍后重试");
-        else if (s === 500) $notification.post(SCRIPT_NAME, "服务器错误(500)", "");
-        else if (s >= 200 && s < 300) $notification.post(SCRIPT_NAME, "签到成功(" + tag + ")", msg || "签到完成");
-        else $notification.post(SCRIPT_NAME, "请求异常 HTTP " + s, msg || "");
-        $done();
-      },
-      (err) => {
+    $httpClient.post(req, (err, resp, body) => {
+      if (err) {
         $notification.post(SCRIPT_NAME, "网络错误", String(err && err.error ? err.error : err || ""));
         $done();
+        return;
       }
-    );
+
+      const s = resp && (resp.status || resp.statusCode);
+      let msg = "";
+      try { msg = JSON.parse(body || "{}").message || ""; } catch (e) {}
+
+      const tag = FIXED_LEGS === "true" ? "固定" : "随机";
+      if (s === 403) $notification.post(SCRIPT_NAME, "被风控(403)", msg || "稍后重试，或重新获取Cookie");
+      else if (s === 500) $notification.post(SCRIPT_NAME, "服务器错误(500)", msg || "");
+      else if (s >= 200 && s < 300) $notification.post(SCRIPT_NAME, "签到成功(" + tag + ")", msg || "签到完成");
+      else $notification.post(SCRIPT_NAME, "请求异常 HTTP " + s, msg || "");
+      $done();
+    });
   }
 }
