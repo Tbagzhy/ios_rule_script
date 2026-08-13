@@ -6,14 +6,13 @@
  *   MONITOR_POLICY=Proxy
  *   SHOW_IP=false
  *   REFRESH_MINUTES=10
+ *   RULE_FILTER_ENABLED=true
+ *   RULE_FILTER_NAME=Advertising_All → REJECT
  */
 
 const TRACE_URL = 'https://www.cloudflare.com/cdn-cgi/trace';
 const CAPTIVE_URL = 'https://cp.cloudflare.com/generate_204';
 const IPV6_URL = 'https://api6.ipify.org?format=json';
-// Generic-script requests do not run through ordinary URL matching. Force Egern's
-// built-in REJECT policy to verify that the filtering executor is operational.
-const FILTER_TEST_URL = 'https://cp.cloudflare.com/generate_204';
 
 const C = {
   bg:       { light: '#FFFFFF', dark: '#050506' },
@@ -105,29 +104,25 @@ function maskIp(ip) {
   return parts.length === 4 ? `${parts[0]}.${parts[1]}.•••.${parts[3]}` : ip;
 }
 
-async function filterCheck(ctx) {
-  try {
-    const response = await ctx.http.get(FILTER_TEST_URL, {
-      timeout: 3500,
-      redirect: 'manual',
-      policy: 'REJECT'
-    });
+function filterCheck(ctx) {
+  const enabled = boolEnv(ctx, 'RULE_FILTER_ENABLED', false);
+  const name = String(ctx.env?.RULE_FILTER_NAME || 'REJECT 规则').trim();
+  if (enabled) {
     return check(
       'filter',
-      '规则过滤',
-      '异常放行',
-      'warn',
-      `REJECT 探针返回 HTTP ${response.status || 0}`
-    );
-  } catch (error) {
-    return check(
-      'filter',
-      '规则过滤',
-      '已启用',
+      '规则配置',
+      '已配置',
       'pass',
-      'Egern REJECT 策略工作正常'
+      `${name}（Generic API 不提供命中统计）`
     );
   }
+  return check(
+    'filter',
+    '规则配置',
+    '未声明',
+    'unknown',
+    '请在组件环境变量中声明已启用的过滤规则'
+  );
 }
 
 function tunnelCheck(egress, direct, forcedPolicy) {
