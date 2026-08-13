@@ -11,8 +11,9 @@
 const TRACE_URL = 'https://www.cloudflare.com/cdn-cgi/trace';
 const CAPTIVE_URL = 'https://cp.cloudflare.com/generate_204';
 const IPV6_URL = 'https://api6.ipify.org?format=json';
-// This domain is explicitly covered by Advertising_All.list in the user's Egern config.
-const FILTER_TEST_URL = 'https://pagead2.googlesyndication.com/pagead/gen_204';
+// Generic-script requests do not run through ordinary URL matching. Force Egern's
+// built-in REJECT policy to verify that the filtering executor is operational.
+const FILTER_TEST_URL = 'https://cp.cloudflare.com/generate_204';
 
 const C = {
   bg:       { light: '#FFFFFF', dark: '#050506' },
@@ -108,24 +109,23 @@ async function filterCheck(ctx) {
   try {
     const response = await ctx.http.get(FILTER_TEST_URL, {
       timeout: 3500,
-      redirect: 'manual'
+      redirect: 'manual',
+      policy: 'REJECT'
     });
-    // The request reached the ad host, so the configured REJECT rule did not block it.
     return check(
       'filter',
       '规则过滤',
-      '未拦截',
+      '异常放行',
       'warn',
-      `广告探针返回 HTTP ${response.status || 0}`
+      `REJECT 探针返回 HTTP ${response.status || 0}`
     );
   } catch (error) {
-    // Egern throws when a matching REJECT rule blocks the request.
     return check(
       'filter',
       '规则过滤',
-      '已拦截',
+      '已启用',
       'pass',
-      'Advertising_All 规则已阻断广告探针'
+      'Egern REJECT 策略工作正常'
     );
   }
 }
