@@ -1,0 +1,13 @@
+#!name= 网上国网 Egern 修复版
+#!desc= 官方 HTTPS 直连 | 修复 getWebToken 重定向响应丢失
+#!author= 𝐎𝐍𝐙𝟑𝐕 / Tbagzhy
+#!category= 通用重写
+#!arguments= CRONEXP:"0 9 * * *",USERNAME:"",PASSWORD:"",SGCC:"网上国网",调试模式:false,近期用量:false,通知全部户号:false,TIMEOUT:60
+
+[Script]
+{{{SGCC}}}接口重写 = type=http-request, pattern=^https?:\/\/api\.wsgw-rewrite\.com\/electricity\/bill\/all, script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/3fe001bd2ea91e590bcaa5e9ec2ff531991ba7e3/script/95598/95598_egern_redirect.js, requires-body=true, max-size=-1, timeout={{{TIMEOUT}}}
+
+网上国网 = type=cron, cronexp="{{{CRONEXP}}}", script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/3fe001bd2ea91e590bcaa5e9ec2ff531991ba7e3/script/95598/95598_egern_redirect.js, timeout={{{TIMEOUT}}},argument=username="{{{USERNAME}}}"&password="{{{PASSWORD}}}"&debug="{{{调试模式}}}"&show_recent_usage="{{{近期用量}}}"&notify_all_accounts="{{{通知全部户号}}}"
+
+[MITM]
+hostname = %APPEND% api.wsgw-rewrite.com,api.120399.xyz,www.95598.cn
