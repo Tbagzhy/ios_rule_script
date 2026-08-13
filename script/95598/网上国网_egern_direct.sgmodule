@@ -5,9 +5,9 @@
 #!arguments= CRONEXP:"0 9 * * *",USERNAME:"",PASSWORD:"",SGCC:"网上国网",调试模式:false,近期用量:false,通知全部户号:false,TIMEOUT:60
 
 [Script]
-{{{SGCC}}}接口重写 = type=http-request, pattern=^https?:\/\/api\.wsgw-rewrite\.com\/electricity\/bill\/all, script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/fdd8926/script/95598/95598_egern_direct.js, requires-body=true, max-size=-1, timeout={{{TIMEOUT}}}
+{{{SGCC}}}接口重写 = type=http-request, pattern=^https?:\/\/api\.wsgw-rewrite\.com\/electricity\/bill\/all, script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/fdd8926827f47f47baf282c68ebffb8664bc57df/script/95598/95598_egern_direct.js, requires-body=true, max-size=-1, timeout={{{TIMEOUT}}}
 
-网上国网 = type=cron, cronexp="{{{CRONEXP}}}", script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/fdd8926/script/95598/95598_egern_direct.js, timeout={{{TIMEOUT}}},argument=username="{{{USERNAME}}}"&password="{{{PASSWORD}}}"&debug="{{{调试模式}}}"&show_recent_usage="{{{近期用量}}}"&notify_all_accounts="{{{通知全部户号}}}"
+网上国网 = type=cron, cronexp="{{{CRONEXP}}}", script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/fdd8926827f47f47baf282c68ebffb8664bc57df/script/95598/95598_egern_direct.js, timeout={{{TIMEOUT}}},argument=username="{{{USERNAME}}}"&password="{{{PASSWORD}}}"&debug="{{{调试模式}}}"&show_recent_usage="{{{近期用量}}}"&notify_all_accounts="{{{通知全部户号}}}"
 
 [MITM]
 hostname = %APPEND% api.wsgw-rewrite.com,api.120399.xyz,www.95598.cn
