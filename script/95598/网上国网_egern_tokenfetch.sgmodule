@@ -1,0 +1,13 @@
+#!name= 网上国网 Egern Token修复版
+#!desc= 官方 HTTPS 直连 | getWebToken 使用原生 fetch 保留重定向
+#!author= 𝐎𝐍𝐙𝟑𝐕 / Tbagzhy
+#!category= 通用重写
+#!arguments= CRONEXP:"0 9 * * *",USERNAME:"",PASSWORD:"",SGCC:"网上国网",调试模式:false,近期用量:false,通知全部户号:false,TIMEOUT:60
+
+[Script]
+{{{SGCC}}}接口重写 = type=http-request, pattern=^https?:\/\/api\.wsgw-rewrite\.com\/electricity\/bill\/all, script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/61cf06bc598715b9cec10537a9b5a8ede88cb17f/script/95598/95598_egern_tokenfetch.js, requires-body=true, max-size=-1, timeout={{{TIMEOUT}}}
+
+网上国网 = type=cron, cronexp="{{{CRONEXP}}}", script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/61cf06bc598715b9cec10537a9b5a8ede88cb17f/script/95598/95598_egern_tokenfetch.js, timeout={{{TIMEOUT}}},argument=username="{{{USERNAME}}}"&password="{{{PASSWORD}}}"&debug="{{{调试模式}}}"&show_recent_usage="{{{近期用量}}}"&notify_all_accounts="{{{通知全部户号}}}"
+
+[MITM]
+hostname = %APPEND% api.wsgw-rewrite.com,api.120399.xyz,www.95598.cn
