@@ -1,7 +1,7 @@
 #!name=机场流量信息
 #!desc=Surge 机场订阅流量面板：自动 HEAD→GET 回退，显示剩余、已用、总量、重置日和到期日。订阅 URL 必须 URL Encode。
 #!category=面板
-#!arguments=NAME:机场流量,URL:,RESET_DAY:,METHOD:auto,ICON:externaldrive.fill.badge.icloud,COLOR:#5AC8FA
+#!arguments=NAME:"机场流量",URL:"",RESET_DAY:"",METHOD:"auto",ICON:"externaldrive.fill.badge.icloud",COLOR:"#5AC8FA"
 #!arguments-desc=NAME: 面板名称\nURL: URL Encode 后的订阅地址（必须）\nRESET_DAY: 每月流量重置日，1-31，可留空\nMETHOD: auto/head/get，默认 auto（HEAD 失败自动改 GET）\nICON: SF Symbols 图标\nCOLOR: HEX 图标颜色
 
 [Panel]
