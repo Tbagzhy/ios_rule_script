@@ -1,0 +1,7 @@
+#!name=DMIT Cookie 提取器
+#!desc=访问 dmit.io/clientarea.php 登录后自动弹窗显示 Cookie，复制后即可在 Scripting DMIT 组件中使用
+#!author=Minis
+#!system=ios
+
+[Script]
+DMIT 获取Cookie = type=http-request,pattern=^https?:\/\/www\.dmit\.io\/clientarea\.php,requires-body=0,max-size=0,script-path=https://raw.githubusercontent.com/Tbagzhy/ios_rule_script/master/script/DMIT/dmit_cookie.js,timeout=10
